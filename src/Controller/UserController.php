@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Service\UserRegistrationValidator;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,10 +17,17 @@ class UserController extends AbstractController
     public function register(Request $request, UserRegistrationValidator $userRegistrationValidator)
     {
         $userData = json_decode($request->getContent());
-        $userRegistrationValidator->validate($userData);
-        if (!$userRegistrationValidator->isValid()) {
-            return $this->json(["errors" => $userRegistrationValidator->getErrors()]);
+        $user = $userRegistrationValidator->validate($userData);
+        if ($user) {
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($user);
+                $em->flush();
+                return $this->json('user created', 201);
+            } catch (Exception $e) {
+                return $this->json($e->getMessage());
+            }
         }
-        return $this->json("ready to go!");
+        return $this->json(["errors" => $userRegistrationValidator->getErrors()]);
     }
 }

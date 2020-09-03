@@ -12,6 +12,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
+    public function __construct()
+    {
+        $this->emailVerified = false;
+    }
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -39,6 +43,11 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $displayName;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $emailVerified;
 
     public function getId(): ?int
     {
@@ -126,6 +135,18 @@ class User implements UserInterface
     public function setDisplayName(string $displayName): self
     {
         $this->displayName = $displayName;
+
+        return $this;
+    }
+
+    public function getEmailVerified(): ?bool
+    {
+        return $this->emailVerified;
+    }
+
+    public function setEmailVerified(bool $emailVerified): self
+    {
+        $this->emailVerified = $emailVerified;
 
         return $this;
     }
