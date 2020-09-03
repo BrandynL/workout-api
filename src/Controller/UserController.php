@@ -30,4 +30,12 @@ class UserController extends AbstractController
         }
         return $this->json(["errors" => $userRegistrationValidator->getErrors()]);
     }
+
+    /**
+     * @Route("/api/v1/auth", methods={"POST"})
+     */
+    public function auth()
+    {
+        return $this->json("hit the auth endpoint");
+    }
 }
