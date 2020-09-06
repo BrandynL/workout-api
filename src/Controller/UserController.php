@@ -28,6 +28,6 @@ class UserController extends AbstractController
                 return $this->json($e->getMessage());
             }
         }
-        return $this->json(["errors" => $userRegistrationValidator->getErrors()]);
+        return $this->json(["errors" => $userRegistrationValidator->getErrors()], 400);
     }
 }

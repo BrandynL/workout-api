@@ -30,9 +30,9 @@ class AuthenticationService
 	/**
 	 * Helper function to make sure that we recieved the property object keys used to locate a user
 	 */
-	public function credentialsWereProvided(object $requestData)
+	public function credentialsWereProvided(object $requestData = null)
 	{
-		return (isset($requestData->email) && isset($requestData->password));
+		return (isset($requestData) && isset($requestData->email) && isset($requestData->password));
 	}
 
 	/**

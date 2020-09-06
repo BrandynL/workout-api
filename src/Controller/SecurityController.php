@@ -21,7 +21,7 @@ class SecurityController extends AbstractController
                 "displayName" => $user->getDisplayName(),
             ]]);
         } else {
-            return $this->json(["errors" => $authenticationService->getErrors()]);
+            return $this->json(["errors" => $authenticationService->getErrors()], 400);
         }
         // check if username or display name provided, or simply try to find a user from the credientials provided ?
 
