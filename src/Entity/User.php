@@ -49,6 +49,11 @@ class User implements UserInterface
      */
     private $emailVerified;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $token;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -147,6 +152,18 @@ class User implements UserInterface
     public function setEmailVerified(bool $emailVerified): self
     {
         $this->emailVerified = $emailVerified;
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): self
+    {
+        $this->token = $token;
 
         return $this;
     }

@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Service\AuthenticationService;
+use App\Service\JWTService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,19 +14,16 @@ class SecurityController extends AbstractController
     /**
      * @Route("/api/v1/auth", name="security")
      */
-    public function authenticate(Request $request, AuthenticationService $authenticationService)
+    public function authenticate(Request $request, AuthenticationService $authenticationService, EntityManagerInterface $entityManager)
     {
-        $credentials = json_decode($request->getContent());
         if ($user = $authenticationService->authenticateUserFromRequest($request)) {
-            return $this->json(["user" => [
-                "email" => $user->getEmail(),
-                "displayName" => $user->getDisplayName(),
-            ]]);
+            $jwt = JWTService::createJWT($user);
+            $user->setToken($jwt);
+            $entityManager->persist($user);
+            $entityManager->flush();
+            return $this->json($jwt);
         } else {
             return $this->json(["errors" => $authenticationService->getErrors()], 400);
         }
-        // check if username or display name provided, or simply try to find a user from the credientials provided ?
-
-        return $this->json($credentials);
     }
 }
