@@ -21,7 +21,11 @@ class SecurityController extends AbstractController
             $user->setToken($jwt);
             $entityManager->persist($user);
             $entityManager->flush();
-            return $this->json($jwt);
+            return $this->json([
+                "token" => $jwt,
+                "displayName" => $user->getDisplayName(),
+                "email" => $user->getDisplayName(),
+            ]);
         } else {
             return $this->json(["errors" => $authenticationService->getErrors()], 400);
         }
